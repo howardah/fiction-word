@@ -1,8 +1,8 @@
-exports.wordGen = function(){
-    return makeNewWord();
+exports.wordGen = function(wLength){
+    return makeNewWord(wLength);
 }
 
-function makeNewWord() {
+function makeNewWord(wLength) {
     // var longOrShort = Math.round(Math.random()) ? 12 : 6,
     var lengthOfWord = 1,//Math.ceil(Math.random() * longOrShort) + 1,
     newWord = '',
@@ -17,13 +17,17 @@ function makeNewWord() {
         ' ': 30
     };
 
-
-    while(wordEnder){
-        var shortener = 100 - (lengthOfWord * 10);
-        shortener = (shortener < 5) ? 5 : shortener;
-        // if(shortener)
-        lengthOfWord++;
-        theOdds(shortener) ? (wordEnder = true) : (wordEnder = false);
+    if(wLength !== undefined && typeof wLength === 'number'){
+        lengthOfWord = wLength;
+        wordEnder = 'exact';
+    } else {
+        while(wordEnder){
+            var shortener = 100 - (lengthOfWord * 10);
+            shortener = (shortener < 5) ? 5 : shortener;
+            // if(shortener)
+            lengthOfWord++;
+            theOdds(shortener) ? (wordEnder = true) : (wordEnder = false);
+        }
     }
 
     // console.log(lengthOfWord);
@@ -32,18 +36,21 @@ function makeNewWord() {
 
         newWord += giveMeALetter(newWord, lengthOfWord);
 
-        if(newWord.length === lengthOfWord){
+        if(newWord.length >= lengthOfWord){
             var lastChar = newWord.charAt(newWord.length-1);
-
-            if(!/[aeiou]/g.test(newWord)){
-                newWord = '';
-            }
 
             if(lastChar in maybeDontEndWith){
                 var sliceC = -1;
                 if(lastChar === ' ') sliceC = -2;
                 if(theOdds(maybeDontEndWith[lastChar])) newWord = newWord.slice(0,sliceC);
             }
+            
+            if(!/[aeiou]/g.test(newWord)){
+                newWord = '';
+            } else if(wordEnder === 'exact' && newWord.length > lengthOfWord){
+                newWord = '';
+            }
+            
         }
     }
 

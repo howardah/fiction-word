@@ -1,6 +1,6 @@
 {
   "name": "fiction-word",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A random word generator.",
   "main": "fiction-word.js",
   "scripts": {
