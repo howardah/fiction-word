@@ -1,8 +1,8 @@
 {
-  "name": "word-gen",
+  "name": "fiction-word",
   "version": "1.0.0",
   "description": "A random word generator.",
-  "main": "word-gen.js",
+  "main": "fiction-word.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
