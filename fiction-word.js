@@ -1,5 +1,5 @@
 exports.wordGen = function(){
-    makeNewWord();
+    return makeNewWord();
 }
 
 function makeNewWord() {

@@ -1,6 +1,6 @@
 {
   "name": "fiction-word",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A random word generator.",
   "main": "fiction-word.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/howardah/word-gen.git"
+    "url": "git+https://github.com/howardah/fiction-word.git"
   },
   "keywords": [
     "random",
@@ -16,12 +16,14 @@
     "generator",
     "made-up",
     "writing",
-    "tool"
+    "tool",
+    "fictional",
+    "fiction"
   ],
   "author": "Adam Thomas Howard",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/howardah/word-gen/issues"
+    "url": "https://github.com/howardah/fiction-word/issues"
   },
-  "homepage": "https://github.com/howardah/word-gen#readme"
+  "homepage": "https://github.com/howardah/fiction-word#readme"
 }
