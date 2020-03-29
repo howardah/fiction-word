@@ -1,0 +1,27 @@
+{
+  "name": "word-gen",
+  "version": "1.0.0",
+  "description": "A random word generator.",
+  "main": "word-gen.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/howardah/word-gen.git"
+  },
+  "keywords": [
+    "random",
+    "word",
+    "generator",
+    "made-up",
+    "writing",
+    "tool"
+  ],
+  "author": "Adam Thomas Howard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/howardah/word-gen/issues"
+  },
+  "homepage": "https://github.com/howardah/word-gen#readme"
+}
