@@ -43,7 +43,7 @@ console.log(fiction.paragraph(5));
 // Nea whucrio rou ghought foclijad quefio vio preyn preha blef divea querat toogav xouw  
 // magea giblou laseauck shov.Chota si geehi xou shoumo ya fe diaxee koh cug banyed lob iovi  
 // brier wetreff. Wheetok uhad stree deeg giv byshooc deahyp rond we bleab wav pretraies thekam  
-// whitoo whelo xiowik. Bovo owa hecrese irobly so see kagee ranoond ec fi acofiv daed footion blioc  
-// gyswu ludiwove hakabeck atrea trow ock. Dowee diacot whirux to egoond fithude vies dianiv chisha  
-// rioswea sweing swicapuw tref neato noov aff ebim kuing yo.
+// whitoo whelo xiowik. Bovo owa hecrese irobly so see kagee ranoond ec fi acofiv daed footion  
+// blioc gyswu ludiwove hakabeck atrea trow ock. Dowee diacot whirux to egoond fithude vies  
+// dianiv chisha rioswea sweing swicapuw tref neato noov aff ebim kuing yo.
 ```
