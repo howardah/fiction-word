@@ -1,6 +1,6 @@
 {
   "name": "fiction-word",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A random word generator.",
   "main": "fiction-word.js",
   "scripts": {
@@ -18,7 +18,10 @@
     "writing",
     "tool",
     "fictional",
-    "fiction"
+    "fiction",
+    "lorem",
+    "ipsum",
+    "greek"
   ],
   "author": "Adam Thomas Howard",
   "license": "ISC",
