@@ -1,1 +1,4 @@
-export declare function wordGen(length: number): string;
+declare const _default: {
+    wordGen: (length: number) => string;
+};
+export default _default;
