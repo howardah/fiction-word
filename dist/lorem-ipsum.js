@@ -9,11 +9,11 @@ const makeSentence = (length) => {
     length = length || (0, tools_1.range)(bottom, top);
     if (length < 1)
         length = 1;
-    let sentence = (0, tools_1.capitalizeFirstLetter)((0, fiction_word_1.makeWord)());
+    let sentence = `${(0, tools_1.capitalizeFirstLetter)((0, fiction_word_1.makeWord)())} `;
     for (let i = 1; i < length; i++) {
-        sentence += (0, fiction_word_1.makeWord)();
+        sentence += `${(0, fiction_word_1.makeWord)()} `;
     }
-    return `${sentence}.`;
+    return `${sentence.slice(0, -1)}.`;
 };
 exports.makeSentence = makeSentence;
 const makeParagraph = (length) => {

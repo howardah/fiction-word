@@ -7,12 +7,12 @@ const makeSentence = (length?: number): string => {
 
   length = length || range(bottom, top);
   if (length < 1) length = 1;
-  let sentence = capitalizeFirstLetter(makeWord());
+  let sentence = `${capitalizeFirstLetter(makeWord())} `;
   for (let i = 1; i < length; i++) {
-    sentence += makeWord();
+    sentence += `${makeWord()} `;
   }
 
-  return `${sentence}.`;
+  return `${sentence.slice(0, -1)}.`;
 };
 
 const makeParagraph = (length?: number): string => {
