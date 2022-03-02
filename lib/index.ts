@@ -1,7 +1,9 @@
-import { makeNewWord } from "./fiction-word";
+import { makeWord } from "./fiction-word";
+import { makeParagraph, makeSentence } from "./lorem-ipsum";
+import { capitalizeFirstLetter } from "./tools";
 
 export default {
-  wordGen: function wordGen(length: number): string {
-    return makeNewWord(length);
-  },
+  word: (length?: number): string => capitalizeFirstLetter(makeWord(length)),
+  sentence: makeSentence,
+  paragraph: makeParagraph,
 };

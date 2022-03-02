@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeNewWord = void 0;
-function makeNewWord(wLength) {
+exports.makeWord = void 0;
+const tools_1 = require("./tools");
+function makeWord(wLength) {
     // var longOrShort = Math.round(Math.random()) ? 12 : 6,
     var lengthOfWord = 1, //Math.ceil(Math.random() * longOrShort) + 1,
     newWord = "", wordEnder = true, wordLength = "flex", maybeDontEndWith = {
@@ -23,7 +24,7 @@ function makeNewWord(wLength) {
             shortener = shortener < 5 ? 5 : shortener;
             // if(shortener)
             lengthOfWord++;
-            theOdds(shortener) ? (wordEnder = true) : (wordEnder = false);
+            (0, tools_1.theOdds)(shortener) ? (wordEnder = true) : (wordEnder = false);
         }
     }
     // console.log(lengthOfWord);
@@ -35,7 +36,7 @@ function makeNewWord(wLength) {
                 var sliceC = -1;
                 if (lastChar === " ")
                     sliceC = -2;
-                if (theOdds(maybeDontEndWith[lastChar]))
+                if ((0, tools_1.theOdds)(maybeDontEndWith[lastChar]))
                     newWord = newWord.slice(0, sliceC);
             }
             if (!/[aeiou]/g.test(newWord)) {
@@ -50,11 +51,11 @@ function makeNewWord(wLength) {
         newWord = newWord.replace(/eee/g, "ee");
     if (/ii/g.test(newWord))
         newWord = newWord.replace(/ii/g, "i");
-    if (/y[b, t, k, r, z]$/.test(newWord) && theOdds(90))
+    if (/y[b, t, k, r, z]$/.test(newWord) && (0, tools_1.theOdds)(90))
         newWord = newWord.replace(/y([^y]*)$/, "i" + "$1");
-    return capitalizeFirstLetter(newWord.trim());
+    return newWord.trim();
 }
-exports.makeNewWord = makeNewWord;
+exports.makeWord = makeWord;
 function giveMeALetter(newWord, wordLength) {
     var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"], suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"], vowels = ["a", "e", "i", "o", "u", "y"], consonants = [
         "b",
@@ -120,18 +121,18 @@ function giveMeALetter(newWord, wordLength) {
         possibles = possibles.concat(vowels, consonants);
         if (wordLength > 3)
             possibles = possibles.concat(prefixes, consonantCluster);
-        if (theOdds(20))
+        if ((0, tools_1.theOdds)(20))
             possibles = possibles.concat(dipthong);
         possibles = rl(possibles, ["ff"]);
     }
     switch (lastLetter) {
         case "i":
-            if (theOdds(70))
+            if ((0, tools_1.theOdds)(70))
                 possibles = rl(possibles, ["w", "q", "x"]);
             break;
         case "q":
             if (newWord.length !== wordLength - 1 || wordLength == 2) {
-                if (theOdds(90))
+                if ((0, tools_1.theOdds)(90))
                     possibles = ["u"];
             }
             else {
@@ -139,7 +140,7 @@ function giveMeALetter(newWord, wordLength) {
             }
             break;
         case "u":
-            if (letterBefore === "q" && theOdds(60))
+            if (letterBefore === "q" && (0, tools_1.theOdds)(60))
                 possibles = ["e"];
             break;
         case "y":
@@ -152,27 +153,27 @@ function giveMeALetter(newWord, wordLength) {
     checker = false;
     switch (chosenLetter) {
         case "eau":
-            if (theOdds(40))
+            if ((0, tools_1.theOdds)(40))
                 possibles = rl(possibles, ["eau"]);
             checker = true;
             break;
         case "q":
         case "qu":
         case "que":
-            if (theOdds(60)) {
+            if ((0, tools_1.theOdds)(60)) {
                 checker = true;
             }
-            if (/q/g.test(newWord) && theOdds(93)) {
+            if (/q/g.test(newWord) && (0, tools_1.theOdds)(93)) {
                 possibles = rl(possibles, ["q", "que", "qu"]);
                 checker = true;
             }
-            if (chosenLetter === "que" && wordLength < 5 && theOdds(93)) {
+            if (chosenLetter === "que" && wordLength < 5 && (0, tools_1.theOdds)(93)) {
                 possibles = rl(possibles, ["que"]);
                 checker = true;
             }
             break;
         case "y":
-            if (theOdds(60)) {
+            if ((0, tools_1.theOdds)(60)) {
                 checker = true;
             }
             break;
@@ -180,17 +181,17 @@ function giveMeALetter(newWord, wordLength) {
             break;
     }
     if (chosenLetter === letterBefore) {
-        if (theOdds(60)) {
+        if ((0, tools_1.theOdds)(60)) {
             possibles = rl(possibles, [chosenLetter]);
         }
         checker = true;
     }
-    if (marked.includes(chosenLetter) && theOdds(80)) {
+    if (marked.includes(chosenLetter) && (0, tools_1.theOdds)(80)) {
         var re = new RegExp(chosenLetter, "g");
-        if (theOdds(60)) {
+        if ((0, tools_1.theOdds)(60)) {
             possibles = rl(possibles, marked);
         }
-        if (re.test(newWord) && theOdds(98)) {
+        if (re.test(newWord) && (0, tools_1.theOdds)(98)) {
             possibles = rl(possibles, [chosenLetter]);
         }
         checker = true;
@@ -202,9 +203,6 @@ function giveMeALetter(newWord, wordLength) {
     }
     return chosenLetter !== undefined ? chosenLetter : "";
 }
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
 function rl(arr, letter) {
     for (var i = 0; i < arr.length; i++) {
         if (letter.includes(arr[i])) {
@@ -212,8 +210,4 @@ function rl(arr, letter) {
         }
     }
     return arr;
-}
-function theOdds(percent) {
-    var Odds = Math.floor(Math.random() * 100);
-    return Odds < percent ? true : false;
 }

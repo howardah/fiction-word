@@ -1,2 +1,2 @@
-declare function makeNewWord(wLength: number): string;
-export { makeNewWord };
+declare function makeWord(wLength?: number): string;
+export { makeWord };

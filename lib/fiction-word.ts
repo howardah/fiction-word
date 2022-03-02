@@ -1,4 +1,6 @@
-function makeNewWord(wLength: number) {
+import { theOdds } from "./tools";
+
+function makeWord(wLength?: number) {
   // var longOrShort = Math.round(Math.random()) ? 12 : 6,
   var lengthOfWord = 1, //Math.ceil(Math.random() * longOrShort) + 1,
     newWord = "",
@@ -55,7 +57,7 @@ function makeNewWord(wLength: number) {
   if (/y[b, t, k, r, z]$/.test(newWord) && theOdds(90))
     newWord = newWord.replace(/y([^y]*)$/, "i" + "$1");
 
-  return capitalizeFirstLetter(newWord.trim());
+  return newWord.trim();
 }
 
 function giveMeALetter(newWord: string, wordLength: number) {
@@ -216,10 +218,6 @@ function giveMeALetter(newWord: string, wordLength: number) {
   return chosenLetter !== undefined ? chosenLetter : "";
 }
 
-function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 function rl(arr: string[], letter: string[]) {
   for (var i = 0; i < arr.length; i++) {
     if (letter.includes(arr[i])) {
@@ -230,9 +228,4 @@ function rl(arr: string[], letter: string[]) {
   return arr;
 }
 
-function theOdds(percent: number) {
-  var Odds = Math.floor(Math.random() * 100);
-  return Odds < percent ? true : false;
-}
-
-export { makeNewWord };
+export { makeWord };

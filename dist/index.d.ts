@@ -1,4 +1,6 @@
 declare const _default: {
-    wordGen: (length: number) => string;
+    word: (length?: number | undefined) => string;
+    sentence: (length?: number | undefined) => string;
+    paragraph: (length?: number | undefined) => string;
 };
 export default _default;
