@@ -1,3 +1,3 @@
-declare const makeSentence: (length?: number | undefined) => string;
-declare const makeParagraph: (length?: number | undefined) => string;
+declare const makeSentence: (length?: number) => string;
+declare const makeParagraph: (length?: number) => string;
 export { makeSentence, makeParagraph };

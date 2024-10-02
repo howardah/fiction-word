@@ -6,16 +6,16 @@ function theOdds(percent) {
     return Odds < percent ? true : false;
 }
 exports.theOdds = theOdds;
-const budgeByOdds = (num, percent, direction) => {
-    const down = direction === "down";
+var budgeByOdds = function (num, percent, direction) {
+    var down = direction === "down";
     while (theOdds(percent))
         down ? num-- : num++;
     return num;
 };
 exports.budgeByOdds = budgeByOdds;
 function range(bottom, top) {
-    const min = Math.ceil(bottom);
-    const max = Math.floor(top);
+    var min = Math.ceil(bottom);
+    var max = Math.floor(top);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 exports.range = range;

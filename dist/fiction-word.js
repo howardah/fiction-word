@@ -1,7 +1,16 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeWord = void 0;
-const tools_1 = require("./tools");
+var tools_1 = require("./tools");
 function makeWord(wLength) {
     // var longOrShort = Math.round(Math.random()) ? 12 : 6,
     var lengthOfWord = 1, //Math.ceil(Math.random() * longOrShort) + 1,
@@ -57,54 +66,18 @@ function makeWord(wLength) {
 }
 exports.makeWord = makeWord;
 function giveMeALetter(newWord, wordLength) {
-    var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"], suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"], vowels = ["a", "e", "i", "o", "u", "y"], consonants = [
-        "b",
-        "c",
-        "d",
-        "f",
-        "g",
-        "h",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "v",
-        "x",
-        "z",
-        "w",
-        "y",
-    ], marked = ["z", "x", "j"], consonantCluster = [
-        "tr",
-        "sc",
-        "th",
-        "sh",
-        "ch",
-        "br",
-        "bl",
-        "cl",
-        "cr",
-        "ff",
-        "que",
-        "qu",
-        "dr",
-        "sw",
-    ], dipthong = ["ee", "ea", "io", "oo", "ou", "eau"], lastLetter = newWord.charAt(newWord.length - 1), letterBefore = newWord.charAt(newWord.length - 2), possibles = [], checker = false, chosenLetter = "";
+    var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"], suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"], vowels = ["a", "e", "i", "o", "u", "y"], consonants = __spreadArray(__spreadArray([], ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"], false), ["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"], false), marked = ["z", "x", "j"], consonantCluster = __spreadArray(__spreadArray([], ["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"], false), ["ff", "que", "qu", "dr", "sw"], false), dipthong = ["ee", "ea", "io", "oo", "ou", "eau"], lastLetter = newWord.charAt(newWord.length - 1), letterBefore = newWord.charAt(newWord.length - 2);
+    var possibles = [], checker = false, chosenLetter = "";
     if (vowels.includes(lastLetter) && !(lastLetter === "y" && newWord.length === 1)) {
         if (wordLength - newWord.length <= 2) {
             possibles = possibles.concat(consonants, consonants, suffixes);
             if (/[e,a,i,o,u]{3}$/.test(newWord)) {
-                possibles = rl(possibles, ["ies", "ed", "er", "ing"]);
+                possibles = removeLetters(possibles, ["ies", "ed", "er", "ing"]);
             }
             else if (/[e,a,i,o,u]{2}$/.test(newWord)) {
-                possibles = rl(possibles, ["ies"]);
+                possibles = removeLetters(possibles, ["ies"]);
                 if (!/[e]{2}$/.test(newWord))
-                    possibles = rl(possibles, ["ed", "er", "ing"]);
+                    possibles = removeLetters(possibles, ["ed", "er", "ing"]);
             }
         }
         else {
@@ -117,18 +90,19 @@ function giveMeALetter(newWord, wordLength) {
             possibles = possibles.concat(vowels, vowels);
     }
     else {
-        vowels = rl(vowels, ["y"]);
+        // vowels = removeLetters(vowels, ["y"]);
+        removeLetters(vowels, ["y"]);
         possibles = possibles.concat(vowels, consonants);
         if (wordLength > 3)
             possibles = possibles.concat(prefixes, consonantCluster);
         if ((0, tools_1.theOdds)(20))
             possibles = possibles.concat(dipthong);
-        possibles = rl(possibles, ["ff"]);
+        possibles = removeLetters(possibles, ["ff"]);
     }
     switch (lastLetter) {
         case "i":
             if ((0, tools_1.theOdds)(70))
-                possibles = rl(possibles, ["w", "q", "x"]);
+                possibles = removeLetters(possibles, ["w", "q", "x"]);
             break;
         case "q":
             if (newWord.length !== wordLength - 1 || wordLength == 2) {
@@ -144,7 +118,7 @@ function giveMeALetter(newWord, wordLength) {
                 possibles = ["e"];
             break;
         case "y":
-            possibles = rl(possibles, ["y"]);
+            possibles = removeLetters(possibles, ["y"]);
             break;
         default:
             break;
@@ -154,7 +128,7 @@ function giveMeALetter(newWord, wordLength) {
     switch (chosenLetter) {
         case "eau":
             if ((0, tools_1.theOdds)(40))
-                possibles = rl(possibles, ["eau"]);
+                possibles = removeLetters(possibles, ["eau"]);
             checker = true;
             break;
         case "q":
@@ -164,11 +138,11 @@ function giveMeALetter(newWord, wordLength) {
                 checker = true;
             }
             if (/q/g.test(newWord) && (0, tools_1.theOdds)(93)) {
-                possibles = rl(possibles, ["q", "que", "qu"]);
+                possibles = removeLetters(possibles, ["q", "que", "qu"]);
                 checker = true;
             }
             if (chosenLetter === "que" && wordLength < 5 && (0, tools_1.theOdds)(93)) {
-                possibles = rl(possibles, ["que"]);
+                possibles = removeLetters(possibles, ["que"]);
                 checker = true;
             }
             break;
@@ -182,17 +156,17 @@ function giveMeALetter(newWord, wordLength) {
     }
     if (chosenLetter === letterBefore) {
         if ((0, tools_1.theOdds)(60)) {
-            possibles = rl(possibles, [chosenLetter]);
+            possibles = removeLetters(possibles, [chosenLetter]);
         }
         checker = true;
     }
     if (marked.includes(chosenLetter) && (0, tools_1.theOdds)(80)) {
         var re = new RegExp(chosenLetter, "g");
         if ((0, tools_1.theOdds)(60)) {
-            possibles = rl(possibles, marked);
+            possibles = removeLetters(possibles, marked);
         }
         if (re.test(newWord) && (0, tools_1.theOdds)(98)) {
-            possibles = rl(possibles, [chosenLetter]);
+            possibles = removeLetters(possibles, [chosenLetter]);
         }
         checker = true;
     }
@@ -203,9 +177,9 @@ function giveMeALetter(newWord, wordLength) {
     }
     return chosenLetter !== undefined ? chosenLetter : "";
 }
-function rl(arr, letter) {
+function removeLetters(arr, letters) {
     for (var i = 0; i < arr.length; i++) {
-        if (letter.includes(arr[i])) {
+        if (letters.includes(arr[i])) {
             arr.splice(i, 1);
         }
     }

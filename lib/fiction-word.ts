@@ -61,53 +61,22 @@ function makeWord(wLength?: number) {
 }
 
 function giveMeALetter(newWord: string, wordLength: number) {
-  var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"],
+  const prefixes = ["str", "pre", "dia", "gh", "wh", "psy"],
     suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"],
     vowels = ["a", "e", "i", "o", "u", "y"],
     consonants = [
-      "b",
-      "c",
-      "d",
-      "f",
-      "g",
-      "h",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "v",
-      "x",
-      "z",
-      "w",
-      "y",
+      ...["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"],
+      ...["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"],
     ],
     marked = ["z", "x", "j"],
     consonantCluster = [
-      "tr",
-      "sc",
-      "th",
-      "sh",
-      "ch",
-      "br",
-      "bl",
-      "cl",
-      "cr",
-      "ff",
-      "que",
-      "qu",
-      "dr",
-      "sw",
+      ...["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"],
+      ...["ff", "que", "qu", "dr", "sw"],
     ],
     dipthong = ["ee", "ea", "io", "oo", "ou", "eau"],
     lastLetter = newWord.charAt(newWord.length - 1),
-    letterBefore = newWord.charAt(newWord.length - 2),
-    possibles: string[] = [],
+    letterBefore = newWord.charAt(newWord.length - 2);
+  let possibles: string[] = [],
     checker = false,
     chosenLetter = "";
 
@@ -115,10 +84,10 @@ function giveMeALetter(newWord: string, wordLength: number) {
     if (wordLength - newWord.length <= 2) {
       possibles = possibles.concat(consonants, consonants, suffixes);
       if (/[e,a,i,o,u]{3}$/.test(newWord)) {
-        possibles = rl(possibles, ["ies", "ed", "er", "ing"]);
+        possibles = removeLetters(possibles, ["ies", "ed", "er", "ing"]);
       } else if (/[e,a,i,o,u]{2}$/.test(newWord)) {
-        possibles = rl(possibles, ["ies"]);
-        if (!/[e]{2}$/.test(newWord)) possibles = rl(possibles, ["ed", "er", "ing"]);
+        possibles = removeLetters(possibles, ["ies"]);
+        if (!/[e]{2}$/.test(newWord)) possibles = removeLetters(possibles, ["ed", "er", "ing"]);
       }
     } else {
       possibles = possibles.concat(consonantCluster, consonants);
@@ -127,17 +96,18 @@ function giveMeALetter(newWord: string, wordLength: number) {
     possibles = possibles.concat(vowels, vowels, dipthong);
     if (wordLength - newWord.length <= 2) possibles = possibles.concat(vowels, vowels);
   } else {
-    vowels = rl(vowels, ["y"]);
+    // vowels = removeLetters(vowels, ["y"]);
+    removeLetters(vowels, ["y"]);
     possibles = possibles.concat(vowels, consonants);
     if (wordLength > 3) possibles = possibles.concat(prefixes, consonantCluster);
     if (theOdds(20)) possibles = possibles.concat(dipthong);
 
-    possibles = rl(possibles, ["ff"]);
+    possibles = removeLetters(possibles, ["ff"]);
   }
 
   switch (lastLetter) {
     case "i":
-      if (theOdds(70)) possibles = rl(possibles, ["w", "q", "x"]);
+      if (theOdds(70)) possibles = removeLetters(possibles, ["w", "q", "x"]);
       break;
     case "q":
       if (newWord.length !== wordLength - 1 || wordLength == 2) {
@@ -150,7 +120,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
       if (letterBefore === "q" && theOdds(60)) possibles = ["e"];
       break;
     case "y":
-      possibles = rl(possibles, ["y"]);
+      possibles = removeLetters(possibles, ["y"]);
       break;
     default:
       break;
@@ -162,7 +132,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
 
   switch (chosenLetter) {
     case "eau":
-      if (theOdds(40)) possibles = rl(possibles, ["eau"]);
+      if (theOdds(40)) possibles = removeLetters(possibles, ["eau"]);
       checker = true;
       break;
     case "q":
@@ -172,11 +142,11 @@ function giveMeALetter(newWord: string, wordLength: number) {
         checker = true;
       }
       if (/q/g.test(newWord) && theOdds(93)) {
-        possibles = rl(possibles, ["q", "que", "qu"]);
+        possibles = removeLetters(possibles, ["q", "que", "qu"]);
         checker = true;
       }
       if (chosenLetter === "que" && wordLength < 5 && theOdds(93)) {
-        possibles = rl(possibles, ["que"]);
+        possibles = removeLetters(possibles, ["que"]);
         checker = true;
       }
       break;
@@ -191,7 +161,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
 
   if (chosenLetter === letterBefore) {
     if (theOdds(60)) {
-      possibles = rl(possibles, [chosenLetter]);
+      possibles = removeLetters(possibles, [chosenLetter]);
     }
     checker = true;
   }
@@ -200,11 +170,11 @@ function giveMeALetter(newWord: string, wordLength: number) {
     var re = new RegExp(chosenLetter, "g");
 
     if (theOdds(60)) {
-      possibles = rl(possibles, marked);
+      possibles = removeLetters(possibles, marked);
     }
 
     if (re.test(newWord) && theOdds(98)) {
-      possibles = rl(possibles, [chosenLetter]);
+      possibles = removeLetters(possibles, [chosenLetter]);
     }
 
     checker = true;
@@ -218,9 +188,9 @@ function giveMeALetter(newWord: string, wordLength: number) {
   return chosenLetter !== undefined ? chosenLetter : "";
 }
 
-function rl(arr: string[], letter: string[]) {
+function removeLetters(arr: string[], letters: string[]) {
   for (var i = 0; i < arr.length; i++) {
-    if (letter.includes(arr[i])) {
+    if (letters.includes(arr[i])) {
       arr.splice(i, 1);
     }
   }
