@@ -11,62 +11,90 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeWord = void 0;
 var tools_1 = require("./tools");
-function makeWord(wLength) {
-    // var longOrShort = Math.round(Math.random()) ? 12 : 6,
-    var lengthOfWord = 1, //Math.ceil(Math.random() * longOrShort) + 1,
-    newWord = "", wordEnder = true, wordLength = "flex", maybeDontEndWith = {
+/**
+ * @description Generates a word length based on the given length or a normally distributed number.
+ * @param givenLength - The given length of the word.
+ * @returns The generated word length.
+ */
+function makeWordLength(givenLength) {
+    if (givenLength !== undefined) {
+        return givenLength;
+    }
+    // Generate a normally distributed number centered around 5.5
+    // Using average of multiple random numbers for approximate normal distribution
+    var min = 1;
+    var max = 14;
+    var mean = 5.5;
+    // Average 3 random numbers to approximate normal distribution
+    var normalRandom = (Math.random() +
+        Math.random() +
+        (mean / (max - min))) / 3;
+    // Scale and shift the result to get desired range
+    var length = Math.round(normalRandom * (max - min));
+    // Ensure the length is within reasonable bounds
+    return Math.max(min, Math.min(max, length));
+}
+/**
+ * @description Generates a word based on the given length or a normally distributed number.
+ * @param givenLength - The given length of the word.
+ * @param lengthType - The type of length variance.
+ * @returns The generated word.
+ */
+function makeWord(givenLength, lengthType) {
+    var lengthVariance = lengthType !== null && lengthType !== void 0 ? lengthType : (givenLength === undefined ? 'flex' : 'exact');
+    // The odds of removing an unusual ending letter
+    var oddEnding = {
         i: 70,
         u: 70,
         a: 30,
         o: 50,
         j: 90,
         q: 30,
-        " ": 30,
     };
-    if (wLength !== undefined) {
-        lengthOfWord = wLength;
-        wordLength = "exact";
-    }
-    else {
-        while (wordEnder) {
-            var shortener = 100 - lengthOfWord * 10;
-            shortener = shortener < 5 ? 5 : shortener;
-            // if(shortener)
-            lengthOfWord++;
-            (0, tools_1.theOdds)(shortener) ? (wordEnder = true) : (wordEnder = false);
-        }
-    }
-    // console.log(lengthOfWord);
-    while (newWord.length < lengthOfWord) {
-        newWord += giveMeALetter(newWord, lengthOfWord);
-        if (newWord.length >= lengthOfWord) {
-            var lastChar = newWord.charAt(newWord.length - 1);
-            if (lastChar in maybeDontEndWith) {
-                var sliceC = -1;
-                if (lastChar === " ")
-                    sliceC = -2;
-                if ((0, tools_1.theOdds)(maybeDontEndWith[lastChar]))
-                    newWord = newWord.slice(0, sliceC);
+    var wordLength = givenLength || makeWordLength(givenLength);
+    var word = "";
+    while (word.length < wordLength) {
+        word += giveMeALetter(word, wordLength);
+        if (word.length >= wordLength) {
+            var lastChar = word.charAt(word.length - 1);
+            if (lastChar in oddEnding) {
+                if ((0, tools_1.theOdds)(oddEnding[lastChar]))
+                    word = word.slice(0, -1);
             }
-            if (!/[aeiou]/g.test(newWord)) {
-                newWord = "";
+            // If the word doesn't contain any vowels, it's not a valid word
+            if (!/[aeiou]/g.test(word)) {
+                word = "";
             }
-            else if (wordLength === "exact" && newWord.length > lengthOfWord) {
-                newWord = "";
+            else if (lengthVariance === "exact" && word.length > wordLength) {
+                word = "";
             }
         }
     }
-    if (/eee/g.test(newWord))
-        newWord = newWord.replace(/eee/g, "ee");
-    if (/ii/g.test(newWord))
-        newWord = newWord.replace(/ii/g, "i");
-    if (/y[b, t, k, r, z]$/.test(newWord) && (0, tools_1.theOdds)(90))
-        newWord = newWord.replace(/y([^y]*)$/, "i" + "$1");
-    return newWord.trim();
+    if (/eee/g.test(word))
+        word = word.replace(/eee/g, "ee");
+    if (/ii/g.test(word))
+        word = word.replace(/ii/g, "i");
+    if (/y[b, t, k, r, z]$/.test(word) && (0, tools_1.theOdds)(90))
+        word = word.replace(/y([^y]*)$/, "i" + "$1");
+    return word.trim();
 }
 exports.makeWord = makeWord;
+/**
+ * @description Generates a letter based on the given word and word length.
+ * @param newWord - The given word.
+ * @param wordLength - The length of the word.
+ * @returns The generated letter.
+ */
 function giveMeALetter(newWord, wordLength) {
-    var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"], suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"], vowels = ["a", "e", "i", "o", "u", "y"], consonants = __spreadArray(__spreadArray([], ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"], false), ["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"], false), marked = ["z", "x", "j"], consonantCluster = __spreadArray(__spreadArray([], ["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"], false), ["ff", "que", "qu", "dr", "sw"], false), dipthong = ["ee", "ea", "io", "oo", "ou", "eau"], lastLetter = newWord.charAt(newWord.length - 1), letterBefore = newWord.charAt(newWord.length - 2);
+    var prefixes = ["str", "pre", "dia", "gh", "wh", "psy"];
+    var suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"];
+    var vowels = ["a", "e", "i", "o", "u", "y"];
+    var consonants = __spreadArray(__spreadArray([], ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"], false), ["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"], false);
+    var marked = ["z", "x", "j"];
+    var consonantCluster = __spreadArray(__spreadArray([], ["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"], false), ["ff", "que", "qu", "dr", "sw"], false);
+    var dipthong = ["ee", "ea", "io", "oo", "ou", "eau"];
+    var lastLetter = newWord.charAt(newWord.length - 1);
+    var letterBefore = newWord.charAt(newWord.length - 2);
     var possibles = [], checker = false, chosenLetter = "";
     if (vowels.includes(lastLetter) && !(lastLetter === "y" && newWord.length === 1)) {
         if (wordLength - newWord.length <= 2) {
@@ -175,8 +203,14 @@ function giveMeALetter(newWord, wordLength) {
             checker = false;
         chosenLetter = possibles[Math.floor(Math.random() * possibles.length)];
     }
-    return chosenLetter !== undefined ? chosenLetter : "";
+    return (chosenLetter !== undefined ? chosenLetter : "").trim();
 }
+/**
+ * @description Removes letters from an array.
+ * @param arr - The array to remove letters from.
+ * @param letters - The letters to remove.
+ * @returns The array with the letters removed.
+ */
 function removeLetters(arr, letters) {
     for (var i = 0; i < arr.length; i++) {
         if (letters.includes(arr[i])) {
