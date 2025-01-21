@@ -87,21 +87,22 @@ function makeWord(givenLength?: number, lengthType?: 'flex' | 'exact'): string {
  * @returns The generated letter.
  */
 function giveMeALetter(newWord: string, wordLength: number) {
-  const prefixes = ["str", "pre", "dia", "gh", "wh", "psy"],
-    suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"],
-    vowels = ["a", "e", "i", "o", "u", "y"],
-    consonants = [
+  const prefixes = ["str", "pre", "dia", "gh", "wh", "psy"];
+  const suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"];
+  const vowels = ["a", "e", "i", "o", "u", "y"];
+  const consonants = [
       ...["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"],
       ...["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"],
-    ],
-    marked = ["z", "x", "j"],
-    consonantCluster = [
-      ...["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"],
-      ...["ff", "que", "qu", "dr", "sw"],
-    ],
-    dipthong = ["ee", "ea", "io", "oo", "ou", "eau"],
-    lastLetter = newWord.charAt(newWord.length - 1),
-    letterBefore = newWord.charAt(newWord.length - 2);
+  ];
+  const marked = ["z", "x", "j"];
+  const consonantCluster = [
+    ...["tr", "sc", "th", "sh", "ch", "br", "bl", "cl", "cr"],
+    ...["ff", "que", "qu", "dr", "sw"],
+  ];
+  const dipthong = ["ee", "ea", "io", "oo", "ou", "eau"];
+  const lastLetter = newWord.charAt(newWord.length - 1);
+  const letterBefore = newWord.charAt(newWord.length - 2);
+  
   let possibles: string[] = [],
     checker = false,
     chosenLetter = "";

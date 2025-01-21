@@ -15,7 +15,7 @@ function theOdds(percent: number): boolean {
  * @param direction - The direction to bend the number.
  * @returns The bent number.
  */
-const budgeByOdds = (num: number, percent: number, direction: string): number => {
+const budgeByOdds = (num: number, percent: number, direction: 'down' | 'up'): number => {
   const down = direction === "down";
   while (theOdds(percent)) down ? num-- : num++;
   return num;
