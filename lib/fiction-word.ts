@@ -1,33 +1,10 @@
 import { theOdds } from "./tools";
+import { getRandomWordLength } from "./word-length";
 
-/**
- * @description Generates a word length based on the given length or a normally distributed number.
- * @param givenLength - The given length of the word.
- * @returns The generated word length.
- */
-function makeWordLength(givenLength?: number): number {
-  if (givenLength !== undefined) {
-    return givenLength;
-  }
-
-  // Generate a normally distributed number centered around 5.5
-  // Using average of multiple random numbers for approximate normal distribution
-  const min = 1;
-  const max = 14;
-  const mean = 5.5;
-
-  // Average 3 random numbers to approximate normal distribution
-  const normalRandom = (
-    Math.random() +
-    Math.random() +
-    (mean / (max - min))
-  ) / 3;
-
-  // Scale and shift the result to get desired range
-  const length = Math.round(normalRandom * (max - min));
-
-  // Ensure the length is within reasonable bounds
-  return Math.max(min, Math.min(max, length));
+export interface WordOptions {
+  length?: number;
+  lengthType?: "flex" | "exact";
+  distribution?: [number, number][];
 }
 
 /**
@@ -36,8 +13,12 @@ function makeWordLength(givenLength?: number): number {
  * @param lengthType - The type of length variance.
  * @returns The generated word.
  */
-function makeWord(givenLength?: number, lengthType?: 'flex' | 'exact'): string {
-  const lengthVariance = lengthType ?? (givenLength === undefined ? 'flex' : 'exact');
+function makeWord(options?: number | WordOptions): string {
+  if (!options) options = {} as WordOptions;
+  if (typeof options === "number") options = { length: options } as WordOptions;
+  const { length: givenLength, lengthType, distribution } = options;
+
+  const lengthVariance = lengthType ?? (givenLength ? "flex" : "exact");
 
   // The odds of removing an unusual ending letter
   const oddEnding: { [key: string]: number } = {
@@ -49,7 +30,7 @@ function makeWord(givenLength?: number, lengthType?: 'flex' | 'exact'): string {
     q: 30,
   };
 
-  const wordLength = givenLength || makeWordLength(givenLength);
+  const wordLength = givenLength ?? getRandomWordLength(distribution);
 
   let word = "";
   while (word.length < wordLength) {
@@ -91,8 +72,8 @@ function giveMeALetter(newWord: string, wordLength: number) {
   const suffixes = ["tion", "ing", "ies", "ed", "er", "ght", "gh", "ck", "ff", "que", "nd"];
   const vowels = ["a", "e", "i", "o", "u", "y"];
   const consonants = [
-      ...["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"],
-      ...["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"],
+    ...["b", "c", "d", "f", "g", "h", "j", "k", "l", "m"],
+    ...["n", "p", "q", "r", "s", "t", "v", "x", "z", "w", "y"],
   ];
   const marked = ["z", "x", "j"];
   const consonantCluster = [
@@ -102,7 +83,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
   const dipthong = ["ee", "ea", "io", "oo", "ou", "eau"];
   const lastLetter = newWord.charAt(newWord.length - 1);
   const letterBefore = newWord.charAt(newWord.length - 2);
-  
+
   let possibles: string[] = [],
     checker = false,
     chosenLetter = "";
@@ -114,7 +95,8 @@ function giveMeALetter(newWord: string, wordLength: number) {
         possibles = removeLetters(possibles, ["ies", "ed", "er", "ing"]);
       } else if (/[e,a,i,o,u]{2}$/.test(newWord)) {
         possibles = removeLetters(possibles, ["ies"]);
-        if (!/[e]{2}$/.test(newWord)) possibles = removeLetters(possibles, ["ed", "er", "ing"]);
+        if (!/[e]{2}$/.test(newWord))
+          possibles = removeLetters(possibles, ["ed", "er", "ing"]);
       }
     } else {
       possibles = possibles.concat(consonantCluster, consonants);
@@ -137,7 +119,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
       if (theOdds(70)) possibles = removeLetters(possibles, ["w", "q", "x"]);
       break;
     case "q":
-      if (newWord.length !== wordLength - 1 || wordLength == 2) {
+      if (newWord.length !== wordLength - 1 || wordLength === 2) {
         if (theOdds(90)) possibles = ["u"];
       } else {
         return " ";
@@ -194,7 +176,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
   }
 
   if (marked.includes(chosenLetter) && theOdds(80)) {
-    var re = new RegExp(chosenLetter, "g");
+    const re = new RegExp(chosenLetter, "g");
 
     if (theOdds(60)) {
       possibles = removeLetters(possibles, marked);
@@ -222,7 +204,7 @@ function giveMeALetter(newWord: string, wordLength: number) {
  * @returns The array with the letters removed.
  */
 function removeLetters(arr: string[], letters: string[]) {
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (letters.includes(arr[i])) {
       arr.splice(i, 1);
     }
