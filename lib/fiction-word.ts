@@ -1,10 +1,11 @@
 import { theOdds } from "./tools";
-import { getRandomWordLength } from "./word-length";
+import { generateDistribution, getRandomWordLength } from "./word-length";
 
 export interface WordOptions {
   length?: number;
   lengthType?: "flex" | "exact";
   distribution?: [number, number][];
+  distributionType?: "dictionary" | "corpus";
 }
 
 /**
@@ -16,7 +17,7 @@ export interface WordOptions {
 function makeWord(options?: number | WordOptions): string {
   if (!options) options = {} as WordOptions;
   if (typeof options === "number") options = { length: options } as WordOptions;
-  const { length: givenLength, lengthType, distribution } = options;
+  let { length: givenLength, lengthType, distribution, distributionType } = options;
 
   const lengthVariance = lengthType ?? (givenLength ? "flex" : "exact");
 
@@ -30,6 +31,7 @@ function makeWord(options?: number | WordOptions): string {
     q: 30,
   };
 
+  if (!distribution && distributionType) distribution = generateDistribution(distributionType);
   const wordLength = givenLength ?? getRandomWordLength(distribution);
 
   let word = "";

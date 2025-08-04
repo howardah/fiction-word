@@ -16,7 +16,7 @@ export const makeSentence = (options?: number | IpsumOptions): string => {
   let length = typeof options === "number" ? options : options?.length;
   const distribution =
     (typeof options === "object" && options.wordDistribution) ||
-    generateDistribution();
+    generateDistribution("corpus");
 
   const bottom = budgeByOdds(15, 10, "down");
   const top = budgeByOdds(20, 10, "up");
@@ -39,14 +39,14 @@ export const makeParagraph = (options?: number | IpsumOptions): string => {
   let length = typeof options === "number" ? options : options?.length;
   const wordDistribution =
     (typeof options === "object" && options.wordDistribution) ||
-    generateDistribution();
+    generateDistribution("corpus");
 
   const bottom = budgeByOdds(2, 5, "down");
   const top = budgeByOdds(6, 10, "up");
 
   length = Math.max(1, length || range(bottom, top));
-  let paragraph = makeSentence({ wordDistribution });
-  for (let i = 1; i < length; i++) {
+  let paragraph = "";
+  for (let i = 0; i < length; i++) {
     paragraph += `${makeSentence({ wordDistribution })} `;
   }
 

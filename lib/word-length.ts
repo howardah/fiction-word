@@ -3,34 +3,51 @@
  * The distribution is based on the frequency of word lengths in default linux English dictionary.
  */
 
+const dictionaryDistribution: [number, number][] = [
+  [1, 52],
+  [2, 488],
+  [3, 1385],
+  [4, 3688],
+  [5, 6717],
+  [6, 10268],
+  [7, 13451],
+  [8, 13869],
+  [9, 12363],
+  [10, 9823],
+  [11, 6922],
+  [12, 4454],
+  [13, 2549],
+  [14, 1284],
+  [15, 629],
+  [16, 260],
+  [17, 124],
+  [18, 38],
+  [19, 18],
+  [20, 13], // 20+
+];
+
+const corpusDistribution: [number, number][] = [
+  [1, 0.03],
+  [2, 0.06],
+  [3, 0.18],
+  [4, 0.19],
+  [5, 0.16],
+  [6, 0.13],
+  [7, 0.1],
+  [8, 0.07],
+  [9, 0.04],
+  [10, 0.02],
+  [11, 0.02], // 11+
+];
+
 /**
  * @description Computes the cumulative distribution of word lengths.
  * @returns An array of cumulative probabilities for each word length.
  */
-export function generateDistribution() {
+export function generateDistribution(mode: "dictionary" | "corpus" = "dictionary") {
   // Distribution of word lengths
-  const distribution: [number, number][] = [
-    [1, 52],
-    [2, 488],
-    [3, 1385],
-    [4, 3688],
-    [5, 6717],
-    [6, 10268],
-    [7, 13451],
-    [8, 13869],
-    [9, 12363],
-    [10, 9823],
-    [11, 6922],
-    [12, 4454],
-    [13, 2549],
-    [14, 1284],
-    [15, 629],
-    [16, 260],
-    [17, 124],
-    [18, 38],
-    [19, 18],
-    [20, 13], // 20+
-  ];
+  const distribution: [number, number][] =
+    mode === "dictionary" ? dictionaryDistribution : corpusDistribution;
 
   const total = distribution.reduce((sum, [, count]) => sum + count, 0);
 
