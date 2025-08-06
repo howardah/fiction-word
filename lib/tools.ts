@@ -3,9 +3,9 @@
  * @param percent - The percentage chance of the event happening.
  * @returns True if the odds are in favor of the event, false otherwise.
  */
-function theOdds(percent: number): boolean {
+export function theOdds(percent: number): boolean {
   var Odds = Math.floor(Math.random() * 100);
-  return Odds < percent ? true : false;
+  return Odds < percent;
 }
 
 /**
@@ -15,11 +15,11 @@ function theOdds(percent: number): boolean {
  * @param direction - The direction to bend the number.
  * @returns The bent number.
  */
-const budgeByOdds = (num: number, percent: number, direction: 'down' | 'up'): number => {
+export function budgeByOdds(num: number, percent: number, direction: "down" | "up"): number {
   const down = direction === "down";
   while (theOdds(percent)) down ? num-- : num++;
   return num;
-};
+}
 
 /**
  * @description Returns a random number between two numbers.
@@ -27,10 +27,27 @@ const budgeByOdds = (num: number, percent: number, direction: 'down' | 'up'): nu
  * @param top - The top of the range.
  * @returns A random number between the bottom and top.
  */
-function range(bottom: number, top: number): number {
+export function range(bottom: number, top: number): number {
   const min = Math.ceil(bottom);
   const max = Math.floor(top);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * @description Returns a random number from a Gaussian distribution using the Box-Muller transform.
+ * @param mean - The mean of the distribution.
+ * @param standardDeviation - The standard deviation of the distribution.
+ * @returns A random number from the Gaussian distribution.
+ */
+export function gaussianRandom(mean = 0, standardDeviation = 1) {
+  const uniform1 = 1 - Math.random(); // Subtract from 1 to avoid log(0)
+  const uniform2 = Math.random();
+
+  const theta = Math.cos(2.0 * Math.PI * uniform2);
+  const standardNormal = Math.sqrt(-2.0 * Math.log(uniform1)) * theta;
+
+  // Scale and shift to desired mean and standard deviation
+  return standardNormal * standardDeviation + mean;
 }
 
 /**
@@ -38,8 +55,6 @@ function range(bottom: number, top: number): number {
  * @param string - The string to capitalize.
  * @returns The capitalized string.
  */
-function capitalizeFirstLetter(string: string): string {
+export function capitalizeFirstLetter(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-export { theOdds, budgeByOdds, capitalizeFirstLetter, range };
