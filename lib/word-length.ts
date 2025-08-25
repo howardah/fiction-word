@@ -1,6 +1,11 @@
 /*
  * This file contains functions for generating random word lengths based on a predefined distribution.
  * The distribution is based on the frequency of word lengths in default linux English dictionary.
+ *
+ * This can be found with the command:
+ * `sed "s/'s//" /usr/share/dict/words | sort | uniq | awk '{ print length($0); }' | sort -n | uniq -c`
+ *
+ * Source: https://www.reddit.com/r/dataisbeautiful/comments/6jbt4d/a_distribution_of_english_words_by_length_using/
  */
 
 const dictionaryDistribution: [number, number][] = [
@@ -26,18 +31,25 @@ const dictionaryDistribution: [number, number][] = [
   [20, 13], // 20+
 ];
 
+/**
+ * This is a distribution of word lengths based on their frequency of use in the English language.
+ * The data for this distribution can be found on the third page of the source document.
+ *
+ * Source: https://math.wvu.edu/~hdiamond/Math222F17/Sigurd_et_al-2004-Studia_Linguistica.pdf
+ */
+
 const corpusDistribution: [number, number][] = [
   [1, 0.03],
-  [2, 0.06],
-  [3, 0.18],
-  [4, 0.19],
-  [5, 0.16],
-  [6, 0.13],
-  [7, 0.1],
-  [8, 0.07],
+  [2, 0.17],
+  [3, 0.21],
+  [4, 0.16],
+  [5, 0.11],
+  [6, 0.08],
+  [7, 0.08],
+  [8, 0.06],
   [9, 0.04],
-  [10, 0.02],
-  [11, 0.02], // 11+
+  [10, 0.03],
+  [11, 0.03], // 11+
 ];
 
 /**
