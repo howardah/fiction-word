@@ -4,6 +4,8 @@ import {
   sentenceLengthDistribution,
 } from "./distributions";
 
+export type Distribution = [number, number][];
+
 /**
  * @description Computes the cumulative distribution of word lengths.
  * @returns An array of cumulative probabilities for each word length.
@@ -13,7 +15,7 @@ export function generateDistribution(
   max?: number,
 ) {
   // Distribution of word lengths
-  const distribution: [number, number][] = [];
+  const distribution: Distribution = [];
 
   switch (mode) {
     case "dictionary":
@@ -34,7 +36,7 @@ export function generateDistribution(
   const total = distribution.reduce((sum, [, count]) => sum + count, 0);
 
   // Precompute cumulative probabilities
-  const cumulative: [number, number][] = [];
+  const cumulative: Distribution = [];
   let sum = 0;
   for (const [length, count] of distribution) {
     // Don't include max+ as it's a tail distribution
@@ -69,7 +71,7 @@ function sampleLongTail(min = 20, max = 30, decay = 0.6) {
  * Sample a word length from the distribution.
  * @returns A random word length.
  */
-export function getRandomLengthFromDistribution(distribution?: [number, number][]) {
+export function getRandomLengthFromDistribution(distribution?: Distribution) {
   distribution = distribution || generateDistribution("dictionary");
   const rand = Math.random();
   for (const [length, prob] of distribution) {
@@ -77,4 +79,22 @@ export function getRandomLengthFromDistribution(distribution?: [number, number][
   }
   // If it falls into the tail
   return sampleLongTail();
+}
+
+export function validDistribution(distribution?: Distribution): Distribution | null {
+  if (!distribution) return null;
+  if (!Array.isArray(distribution)) return null;
+  if (distribution.length === 0) return null;
+  if (
+    !distribution.every(
+      ([length, count]) => typeof length === "number" && typeof count === "number",
+    )
+  )
+    return null;
+  // if (!distribution.every(([length, count]) => length >= 1 && count >= 0)) return null;
+  // if (!distribution.every(([length, _count], i, arr) => i === 0 || length > arr[i - 1][0]))
+  //   return null;
+  // if (!distribution.every(([_length, count], i, arr) => i === 0 || count >= arr[i - 1][1]))
+  //   return null;
+  return distribution;
 }

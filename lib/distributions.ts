@@ -1,5 +1,6 @@
-/*
- * This file contains functions for generating random word lengths based on a predefined distribution.
+import type { Distribution } from "./word-length";
+
+/**
  * The distribution is based on the frequency of word lengths in default linux English dictionary.
  *
  * This can be found with the command:
@@ -8,7 +9,7 @@
  * Source: https://www.reddit.com/r/dataisbeautiful/comments/6jbt4d/a_distribution_of_english_words_by_length_using/
  */
 
-export const dictionaryDistribution: [number, number][] = [
+export const dictionaryDistribution: Distribution = [
   [1, 52],
   [2, 488],
   [3, 1385],
@@ -38,7 +39,7 @@ export const dictionaryDistribution: [number, number][] = [
  * Source: https://math.wvu.edu/~hdiamond/Math222F17/Sigurd_et_al-2004-Studia_Linguistica.pdf
  */
 
-export const corpusDistribution: [number, number][] = [
+export const corpusDistribution: Distribution = [
   [1, 0.03],
   [2, 0.17],
   [3, 0.21],
@@ -59,7 +60,7 @@ export const corpusDistribution: [number, number][] = [
  * Source: https://math.wvu.edu/~hdiamond/Math222F17/Sigurd_et_al-2004-Studia_Linguistica.pdf
  */
 
-export const sentenceLengthDistribution: [number, number][] = [
+export const sentenceLengthDistribution: Distribution = [
   [1, 0.806],
   [2, 1.37],
   [3, 1.862],

@@ -1,6 +1,10 @@
 import { makeWord } from "./fiction-word";
 import { capitalizeFirstLetter, gaussianRandom } from "./tools";
-import { generateDistribution, getRandomLengthFromDistribution } from "./word-length";
+import {
+  generateDistribution,
+  getRandomLengthFromDistribution,
+  validDistribution,
+} from "./word-length";
 
 export interface IpsumOptions {
   length?: number;
@@ -10,18 +14,16 @@ export interface IpsumOptions {
 
 /**
  * @description Generates a sentence with a given length or a normally distributed number.
- * @param length - The given length of the sentence in words.
+ * @param options - Either the given length of the sentence in words or an object containing full options.
  * @returns The generated sentence.
  */
 export const makeSentence = (options?: number | IpsumOptions): string => {
   let length = typeof options === "number" ? options : options?.length;
-  const distribution =
-    (typeof options === "object" && options.wordDistribution) ||
-    generateDistribution("corpus");
+  const allOptions = typeof options === "object" ? options : {};
 
+  const distribution = allOptions.wordDistribution || generateDistribution("corpus");
   const sentenceDistribution =
-    (typeof options === "object" && options.sentenceDistribution) ||
-    generateDistribution("sentence");
+    allOptions.sentenceDistribution || generateDistribution("sentence");
 
   length = Math.max(1, length || getRandomLengthFromDistribution(sentenceDistribution));
   let sentence = `${capitalizeFirstLetter(makeWord({ distribution }))} `;
@@ -34,18 +36,16 @@ export const makeSentence = (options?: number | IpsumOptions): string => {
 
 /**
  * @description Generates a paragraph with a given length or a normally distributed number.
- * @param length - The given length of the paragraph in sentences.
+ * @param options - Either the given length of the paragraph in sentences or an object containing full options.
  * @returns The generated paragraph.
  */
 export const makeParagraph = (options?: number | IpsumOptions): string => {
   let length = typeof options === "number" ? options : options?.length;
-  const wordDistribution =
-    (typeof options === "object" && options.wordDistribution) ||
-    generateDistribution("corpus");
+  const allOptions = typeof options === "object" ? options : {};
 
+  const wordDistribution = allOptions.wordDistribution || generateDistribution("corpus");
   const sentenceDistribution =
-    (typeof options === "object" && options.sentenceDistribution) ||
-    generateDistribution("sentence");
+    allOptions.sentenceDistribution || generateDistribution("sentence");
 
   length = Math.max(1, length || Math.round(gaussianRandom(5, 1.2)));
   let paragraph = "";
