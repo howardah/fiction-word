@@ -56,7 +56,7 @@ const corpusDistribution: [number, number][] = [
  * @description Computes the cumulative distribution of word lengths.
  * @returns An array of cumulative probabilities for each word length.
  */
-export function generateDistribution(mode: "dictionary" | "corpus" = "dictionary") {
+export function generateDistribution(mode: "dictionary" | "corpus" = "dictionary", max = 20) {
   // Distribution of word lengths
   const distribution: [number, number][] =
     mode === "dictionary" ? dictionaryDistribution : corpusDistribution;
@@ -67,8 +67,8 @@ export function generateDistribution(mode: "dictionary" | "corpus" = "dictionary
   const cumulative: [number, number][] = [];
   let sum = 0;
   for (const [length, count] of distribution) {
-    // Don't include 20+ as it's a tail distribution
-    if (length === 20) break;
+    // Don't include max+ as it's a tail distribution
+    if (length === max) break;
     sum += count;
     cumulative.push([length, sum / total]);
   }
