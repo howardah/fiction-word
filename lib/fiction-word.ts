@@ -1,5 +1,5 @@
 import { theOdds } from "./tools";
-import { generateDistribution, getRandomWordLength } from "./word-length";
+import { generateDistribution, getRandomLengthFromDistribution } from "./word-length";
 
 export interface WordOptions {
   length?: number;
@@ -32,7 +32,7 @@ function makeWord(options?: number | WordOptions): string {
   };
 
   if (!distribution && distributionType) distribution = generateDistribution(distributionType);
-  const wordLength = givenLength ?? getRandomWordLength(distribution);
+  const wordLength = givenLength ?? getRandomLengthFromDistribution(distribution);
 
   let word = "";
   while (word.length < wordLength) {

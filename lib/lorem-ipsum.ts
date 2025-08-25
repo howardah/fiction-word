@@ -1,10 +1,11 @@
 import { makeWord } from "./fiction-word";
-import { budgeByOdds, capitalizeFirstLetter, gaussianRandom, range } from "./tools";
-import { generateDistribution } from "./word-length";
+import { capitalizeFirstLetter, gaussianRandom } from "./tools";
+import { generateDistribution, getRandomLengthFromDistribution } from "./word-length";
 
 export interface IpsumOptions {
   length?: number;
   wordDistribution?: [number, number][];
+  sentenceDistribution?: [number, number][];
 }
 
 /**
@@ -18,7 +19,11 @@ export const makeSentence = (options?: number | IpsumOptions): string => {
     (typeof options === "object" && options.wordDistribution) ||
     generateDistribution("corpus");
 
-  length = Math.max(1, length || Math.round(gaussianRandom(15, 2)));
+  const sentenceDistribution =
+    (typeof options === "object" && options.sentenceDistribution) ||
+    generateDistribution("sentence");
+
+  length = Math.max(1, length || getRandomLengthFromDistribution(sentenceDistribution));
   let sentence = `${capitalizeFirstLetter(makeWord({ distribution }))} `;
   for (let i = 1; i < length; i++) {
     sentence += `${makeWord({ distribution })} `;
@@ -38,10 +43,14 @@ export const makeParagraph = (options?: number | IpsumOptions): string => {
     (typeof options === "object" && options.wordDistribution) ||
     generateDistribution("corpus");
 
+  const sentenceDistribution =
+    (typeof options === "object" && options.sentenceDistribution) ||
+    generateDistribution("sentence");
+
   length = Math.max(1, length || Math.round(gaussianRandom(5, 1.2)));
   let paragraph = "";
   for (let i = 0; i < length; i++) {
-    paragraph += `${makeSentence({ wordDistribution })} `;
+    paragraph += `${makeSentence({ wordDistribution, sentenceDistribution })} `;
   }
 
   return paragraph.trim();
